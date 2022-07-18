@@ -18,7 +18,7 @@ const continentsArr = [
   { name: 'America', s: 'america' },
   { name: 'Asia', s: 'asia' },
   { name: 'Europe', s: 'europe' },
-  { name: 'Oceanía', s: 'oceania' },
+  { name: 'Oceania', s: 'oceania' },
 ]
 
 export default {
