@@ -3,18 +3,20 @@
         <router-link to="/">
             <h1>Where in the world?</h1>
         </router-link>
-        <button @click="handleUserTheme">
-            {{userTheme==='dark' ? 'Light mode' : 'Dark mode'}}            
-        </button>
+        <div class="switch__wrap">
+            <SwitchTheme :handleUserTheme="handleUserTheme"/>
+            {{ userTheme === 'dark' ? 'Dark mode' : 'Light mode' }}
+        </div>
     </navbar>
 </template>
 
 <script>
+import SwitchTheme from './SwitchTheme.vue';
 export default {
     data() {
         return {
             userTheme: ""
-        }
+        };
     },
     methods: {
         setTheme(theme) {
@@ -25,24 +27,23 @@ export default {
             const activeTheme = localStorage.getItem("user-theme");
             if (activeTheme === "light") {
                 this.setTheme("dark");
-            } else {
+            }
+            else {
                 this.setTheme("light");
             }
         },
         getMediaPreference() {
-            const hasDarkPreference = window && window.watchMedia && window.matchMedia(
-                "(prefers-color-scheme: dark)"
-            ).matches;
+            const hasDarkPreference = window && window.watchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
             if (hasDarkPreference) {
                 return "dark";
-            } else {
+            }
+            else {
                 return "light";
             }
         },
         getTheme() {
             return localStorage.getItem("user-theme");
         },
-
     },
     mounted() {
         const initUserTheme = this.getTheme() || this.getMediaPreference();
@@ -52,13 +53,16 @@ export default {
         userTheme(theme) {
             document.documentElement.setAttribute("data-theme", theme);
         }
-    }
+    },
+    components: { SwitchTheme }
 }
 </script>
 
 <style scoped>
 .navbar {
     display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
     justify-content: space-between;
     padding: 0.5rem 2rem;
     color: var(--color-text);
@@ -68,6 +72,7 @@ export default {
 }
 
 h1 {
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-text);
 }
@@ -80,5 +85,17 @@ button {
     border: none;
     background-color: var(--color-bg-elements);
     color: var(--color-text);
+}
+
+.switch__wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width : 600px){
+    .navbar {
+        flex-direction: row;
+    }
 }
 </style>
