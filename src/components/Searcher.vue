@@ -26,9 +26,8 @@ export default {
 
 <style scoped>
 .input {
-    width: 0;
+    width: 100%;
     padding: 1rem;
-    transition: 0.5s ease-in-out;
     outline: none;
     background-color: var(--color-bg-elements);
     color: var(--color-text);
@@ -42,8 +41,13 @@ export default {
     color: var(--color-text);
 }
 
-.input:focus {
+@media (min-width : 768px){
+    .input {
+        width: unset;
+    }
+}
+/* .input:focus {
     outline: none;
     width: 100%;
-}
+} */
 </style>

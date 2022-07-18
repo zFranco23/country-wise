@@ -1,9 +1,17 @@
-<script setup>
+<script>
 import NavBar from './components/NavBar.vue';
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 
 
+export default {
+  components: { NavBar, HelloWorld, TheWelcome },
+
+  created(){
+    const path = '/all';
+    this.$store.dispatch('countries/fetchCountries',path);
+  }
+}
 </script>
 
 <template>
