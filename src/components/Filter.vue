@@ -1,10 +1,11 @@
 <template>
   <div class="filter__region">
     <div class="filter" @click="handleToggle">
-      Filter by Region
+      {{ hasSelectedOneRegion ? hasSelectedOneRegion.name : 'Filter by region' }}
     </div>
     <div class="filter_options" v-if="open">
-      <div class="filter_option" v-for="(c, idx) in continentsArr" :key="`c-${idx}`" @click="handleSelect(c)">
+      <div :class="['filter_option', hasSelectedOneRegion && hasSelectedOneRegion.name === c.name ? 'bold' : '']"
+        v-for="(c, idx) in continentsArr" :key="`c-${idx}`" @click="handleSelect(c)">
         {{ c.name }}
       </div>
     </div>
@@ -29,6 +30,9 @@ export default {
       open: false
     }
   },
+  props: {
+    selectedRegion: String,
+  },
   methods: {
     handleSelect(opt) {
       this.$emit('updateRegion', opt);
@@ -36,6 +40,11 @@ export default {
     },
     handleToggle() {
       this.open = !this.open;
+    }
+  },
+  computed: {
+    hasSelectedOneRegion() {
+      return continentsArr.find(el => el.s === this.selectedRegion);
     }
   }
 }
@@ -47,9 +56,11 @@ export default {
   height: fit-content;
   cursor: pointer;
   font-weight: 500;
-  width: 8rem;
+  width: 12rem;
 }
-
+.bold {
+  font-weight: 800;
+}
 .filter {
   padding: 8px;
   background-color: var(--color-bg-elements);
@@ -59,6 +70,7 @@ export default {
 }
 
 .filter_options {
+  z-index: 9999;
   margin-top: 8px;
   width: 100%;
   height: fit-content;

@@ -1,33 +1,56 @@
-import { getFromApi } from "../../helpers";
+import { fillObjectValues, getFromApi } from "../../helpers";
 export default {
   namespaced: true,
   state: {
     countries: [],
+    region : '',
   },
-
   actions: {
-    async searchByRegion(ctx,payload) {
+    async fetchCountries(ctx, payload) {
       try {
-        const resp = await getFromApi(payload)
-        const r = await resp.json();
-        ctx.commit("updateCountries", r);
+        ctx.commit("initFetchCountries");
+        const resp = await getFromApi(payload);
+        const countries = await resp.json();
+
+        if (!!countries.status) {
+          ctx.commit("fetchCountriesError");
+        } else {
+          ctx.commit("fetchCountriesSuccess", countries);
+        }
       } catch (err) {
         console.log(err);
       }
     },
-    async searchByName(ctx,payload) {
-        try {
-          const resp = await getFromApi(payload)
-          const r = await resp.json();
-          ctx.commit("updateCountries", r);
-        } catch (err) {
-            console.log(err);
-        }
-      },
   },
   mutations: {
-    updateCountries(state, arrCountries) {
-      state.countries = arrCountries;
+    updateRegion(state,payload){
+      state.region =  payload;
+    },
+    initFetchCountries(state) {
+      const fill = {
+        isFetchingCountries: true,
+      };
+      fillObjectValues(state, fill);
+    },
+    fetchCountriesSuccess(state, countries) {
+      const fill = {
+        ...state,
+        countries,
+        fetchCountriesSuccess: true,
+        isFetchingCountries: false,
+      };
+      fillObjectValues(state, fill);
+    },
+    fetchCountriesError(state) {
+      const fill = {
+        ...state,
+        countries: undefined,
+        fetchCountriesSuccess: undefined,
+        fetchCountriesError: true,
+        isFetchingCountries: false,
+      };
+
+      fillObjectValues(state, fill);
     },
   },
 };

@@ -18,3 +18,11 @@ export const getFromApi = (path) => {
   const url = `${BASE_URL}${path}`;
   return fetch(url)
 };
+
+export const fillObjectValues = (to = {}, from= { }) => {
+  if(to){
+    Object.keys(from).forEach((val,idx)=>{
+      to[val] = from[val];
+    })
+  }
+}
